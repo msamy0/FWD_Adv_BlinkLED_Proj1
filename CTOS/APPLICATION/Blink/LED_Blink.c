@@ -13,6 +13,11 @@ void App_SysTick_Callback(void* CBAptr)
 	HAL_LED_TOG( *((GPIO_PinNameType*)CBAptr) );
 }
 
+void App_GPIO_D_Callback(void* CBAptr)
+{
+	HAL_LED_TOG( *((GPIO_PinNameType*)CBAptr) );
+}
+
 
 void App_Setup(void)
 {
@@ -21,8 +26,11 @@ void App_Setup(void)
 	SysTick_init();
 	NVIC_Init();
 
-	static GPIO_PinNameType CBArgument = GPIO_PinF1;
-	SysTick_CallbackRegister(App_SysTick_Callback,(void*)(&CBArgument));
+	static GPIO_PinNameType SysTick_CBArgument = GPIO_PinF1;
+	SysTick_CallbackRegister(App_SysTick_Callback,(void*)(&SysTick_CBArgument));
+
+	static GPIO_PinNameType GPIO_D_CBArgument = GPIO_PinF2;
+	GPIO_D_CallbackRegister(App_GPIO_D_Callback, (void*)(&GPIO_D_CBArgument));
 
 	SysTick_EnableDisable(STICK_Enable);
 }

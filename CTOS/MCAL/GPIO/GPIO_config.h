@@ -24,12 +24,15 @@
 
 static const GPIO_UserConfigStructType GPIO_ConfigTableUserInput[] =
 {
-/*PinName   ,PinDirection  ,PinMode         ,Current     ,PinInternalAttach*/
-{GPIO_PinF1 ,GPIO_PinOutut ,GPIO_PinDigital ,GPIO_Pin8mA ,GPIO_PinPullUp},
-{GPIO_PinF2 ,GPIO_PinOutut ,GPIO_PinDigital ,GPIO_Pin8mA ,GPIO_PinPullUp},
-{GPIO_PinF3 ,GPIO_PinOutut ,GPIO_PinDigital ,GPIO_Pin8mA ,GPIO_PinPullUp},
-{GPIO_PinC0 ,GPIO_PinInput ,GPIO_PinDigital ,GPIO_Pin8mA ,GPIO_PinPullDown},
-{GPIO_PinC1 ,GPIO_PinInput ,GPIO_PinDigital ,GPIO_Pin8mA ,GPIO_PinPullDown},
+/* Leave configuration as default in case you don't need any changes to specific feature*/
+/*PinName   ,PinDirection  ,PinMode         ,Current     ,PinInternalAttach ,InterruptEnable ,InterruptEvent  ,Interrupt Level*/
+{GPIO_PinF1 ,GPIO_PinOutut ,GPIO_PinDigital ,GPIO_Pin8mA ,GPIO_PinPullUp    ,GPIO_INT_DEFAULT,GPIO_INT_DEFAULT,GPIO_INT_DEFAULT},
+{GPIO_PinF2 ,GPIO_PinOutut ,GPIO_PinDigital ,GPIO_Pin8mA ,GPIO_PinPullUp    ,GPIO_INT_DEFAULT,GPIO_INT_DEFAULT,GPIO_INT_DEFAULT},
+{GPIO_PinF3 ,GPIO_PinOutut ,GPIO_PinDigital ,GPIO_Pin8mA ,GPIO_PinPullUp    ,GPIO_INT_DEFAULT,GPIO_INT_DEFAULT,GPIO_INT_DEFAULT},
+{GPIO_PinC0 ,GPIO_PinInput ,GPIO_PinDigital ,GPIO_Pin8mA ,GPIO_PinPullDown  ,GPIO_INT_DEFAULT,GPIO_INT_DEFAULT,GPIO_INT_DEFAULT},
+{GPIO_PinC1 ,GPIO_PinInput ,GPIO_PinDigital ,GPIO_Pin8mA ,GPIO_PinPullDown  ,GPIO_INT_DEFAULT,GPIO_INT_DEFAULT,GPIO_INT_DEFAULT},
+{GPIO_PinD0 ,GPIO_PinInput ,GPIO_PinDigital ,GPIO_Pin8mA ,GPIO_PinPullDown  ,GPIO_INT_ENABLED,GPIO_INT_EDGE   ,GPIO_INT_RISE   },
+
 };
 
 #endif

@@ -19,6 +19,12 @@
 #include "GPIO_interface.h"
 #include "GPIO_config.h"
 
+/*- LOCAL VARIABLES
+------------------------------------------------------------------------------*/
+/* Pointer to function that takes argument of (pointer to void), the function then returns void */
+static void (*GPIO_vPtrFuncHandler)(void *) = NULL;
+/* CallBackArgument Pointer*/
+static void (*CBAptr)= NULL;
 
 /*- LOCAL FUNCTION PROTOTYPES
 ------------------------------------------------------------------------------*/
@@ -360,6 +366,58 @@ GPIO_ErrorHandlerType GPIO_ChannelAttach(GPIO_PinNameType GPIO_PinName, GPIO_Pin
 	}
 }
 
+GPIO_ErrorHandlerType GPIO_ChannelInterrupt(GPIO_PinNameType GPIO_PinName , GPIO_InterruptEnableType IntStatus, GPIO_InterruptEventType IntEvent, GPIO_InterruptLevelType IntLevel)
+{
+
+	if (IntStatus == GPIO_INT_DEFAULT)
+	{
+		return GPIO_SuccessfulOperation;
+	}
+	else if (GPIO_PinName < GPIO_PinA0 || GPIO_PinName > GPIO_PinF7 )
+	{
+		return GPIO_InputErr;
+	}
+
+
+	GPIO_PortNameType  GPIO_PortName = GPIO_PortA;
+	while (GPIO_PinName >7)
+	{
+		GPIO_PinName-=8;
+		GPIO_PortName++;
+	}
+
+	if (IntStatus == GPIO_INT_ENABLED)
+	{
+		CLEAR_BIT (GPIO_IM(GPIO_PortName),GPIO_PinName);
+
+		if (IntEvent == GPIO_INT_EDGE)
+			CLEAR_BIT (GPIO_IS(GPIO_PortName),GPIO_PinName);
+		else if (IntEvent == GPIO_INT_LEVEL)
+			SET_BIT (GPIO_IS(GPIO_PortName),GPIO_PinName);
+
+		if (IntLevel == GPIO_INT_FALL)
+			CLEAR_BIT (GPIO_IS(GPIO_PortName),GPIO_PinName);
+		else if (IntLevel == GPIO_INT_RISE)
+			SET_BIT (GPIO_IS(GPIO_PortName),GPIO_PinName);
+
+		SET_BIT (GPIO_IM(GPIO_PortName),GPIO_PinName);
+
+		return GPIO_SuccessfulOperation;
+
+	}
+	else if (IntStatus == GPIO_INT_DISABLED )
+	{
+		CLEAR_BIT (GPIO_IM(GPIO_PortName),GPIO_PinName);
+		return GPIO_SuccessfulOperation;
+	}
+
+	else
+	{
+		return GPIO_InputErr;
+	}
+
+}
+
 GPIO_ErrorHandlerType GPIO_init(void)
 {
 	uint8 u8ConfigTableSize = sizeof(GPIO_ConfigTableUserInput)/sizeof(GPIO_ConfigTableUserInput[0]);
@@ -373,9 +431,39 @@ GPIO_ErrorHandlerType GPIO_init(void)
 		GPIO_ChannelDirectionSet(GPIO_ConfigTableUserInput[u8LocalCounter].PinName, GPIO_ConfigTableUserInput[u8LocalCounter].PinDirection);
 		GPIO_ChannelMode        (GPIO_ConfigTableUserInput[u8LocalCounter].PinName, GPIO_ConfigTableUserInput[u8LocalCounter].PinMode);
 		GPIO_ChannelAttach      (GPIO_ConfigTableUserInput[u8LocalCounter].PinName, GPIO_ConfigTableUserInput[u8LocalCounter].PinInternalAttach);
-		/* ToDo :- Set Current by adding API accessing it*/
+
+		GPIO_ChannelInterrupt	(GPIO_ConfigTableUserInput[u8LocalCounter].PinName,
+								 GPIO_ConfigTableUserInput[u8LocalCounter].InterruptEnable,
+								 GPIO_ConfigTableUserInput[u8LocalCounter].InterruptEvent,
+								 GPIO_ConfigTableUserInput[u8LocalCounter].InterruptLevel);
+		/* ToDo :- Set Pad Current by adding API accessing it*/
 	}
 	return GPIO_SuccessfulOperation;
+}
+
+GPIO_ErrorHandlerType GPIO_D_CallbackRegister(void (*CallbackFunction)(void *), void *ptr)
+{
+	if (CallbackFunction != NULL)
+	{
+		GPIO_vPtrFuncHandler = CallbackFunction;
+		CBAptr = ptr;
+		return GPIO_SuccessfulOperation;
+	}
+	else
+	{
+		return GPIO_InputErr;
+	}
+}
+
+void GPIOD_Handler(void)
+{
+	if (GPIO_vPtrFuncHandler != NULL)
+	{
+		(*GPIO_vPtrFuncHandler)(CBAptr);
+	}
+	/*Clear interrupt for PortD
+	 * ToDo:- Determine the specific pin triggered this handler and clear it only ! */
+	//GPIO_ICR(GPIO_PortD) = 0xFF;
 }
 
 

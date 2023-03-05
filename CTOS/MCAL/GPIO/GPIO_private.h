@@ -118,6 +118,24 @@ typedef enum
 	GPIO_PinLOW, GPIO_PinHIGH
 } GPIO_PinLevelType;
 
+typedef enum {
+	GPIO_INT_DISABLED,
+	GPIO_INT_ENABLED,
+	GPIO_INT_DEFAULT = 254,
+} GPIO_InterruptEnableType;
+
+/*  */
+typedef enum {
+GPIO_INT_FALL,
+GPIO_INT_RISE,
+GPIO_INT_BOTH,
+} GPIO_InterruptEventType;
+
+typedef enum {
+GPIO_INT_EDGE,
+GPIO_INT_LEVEL,
+
+} GPIO_InterruptLevelType;
 
 typedef struct
 {	
@@ -126,6 +144,11 @@ typedef struct
 	GPIO_PinModeType				PinMode;
 	GPIO_PinOutCurrentType			PinOutputCurrent;
 	GPIO_PinInternalAttachType		PinInternalAttach;
+
+	GPIO_InterruptEnableType		InterruptEnable;
+	GPIO_InterruptEventType         InterruptEvent;
+	GPIO_InterruptLevelType         InterruptLevel;
+
 } GPIO_UserConfigStructType;
 	
 #endif

@@ -30,7 +30,7 @@
 #define STICK_CPUFreq 12000000UL
 
 //Specify the initial Reload Value
-#define STICK_initReloadvalue 10000UL
+#define STICK_initReloadvalue 2000UL
 #if STICK_initReloadvalue > 0xFFFFFF
 #error " Initial STICK_Reloadvalue must be less than or equal (16777215UL MHz) to fit into 24-bit register"
 #endif

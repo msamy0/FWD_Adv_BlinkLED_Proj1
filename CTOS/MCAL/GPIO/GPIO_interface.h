@@ -137,11 +137,37 @@ GPIO_ErrorHandlerType GPIO_ChannelMode(GPIO_PinNameType, GPIO_PinModeType);
 *******************************************************************************/
 GPIO_ErrorHandlerType GPIO_ChannelAttach(GPIO_PinNameType, GPIO_PinInternalAttachType);
 
-
+/*******************************************************************************
+* NAME : GPIO_ChannelInterrupt
+* ID : 0x10
+* SYNC/ASYNC :
+* REENTRANCY :
+* PARAMETER/IN :
+* PARAMETER/OUT :
+* PARAMETER/IN-OUT :
+* RETURN VALUE : GPIO_Successful | GOIP_InputErr
+* DESCRIPTION :
+*******************************************************************************/
+GPIO_ErrorHandlerType GPIO_ChannelInterrupt(GPIO_PinNameType, GPIO_InterruptEnableType, GPIO_InterruptEventType, GPIO_InterruptLevelType );
 
 /* ToDo :- API for pad current setting*/
 /* ToDo :- API for Alternative function setting*/
 /* ToDo :- API for committing and locking feature*/
+
+
+/*******************************************************************************
+* NAME : GPIO_D_CallbackRegister
+* ID : 0x11
+* SYNC/ASYNC :
+* REENTRANCY :
+* PARAMETER/IN :
+* PARAMETER/OUT :
+* PARAMETER/IN-OUT :
+* RETURN VALUE : GPIO_Successful | GOIP_InputErr
+* DESCRIPTION :
+*******************************************************************************/
+GPIO_ErrorHandlerType GPIO_D_CallbackRegister(void (*CallbackFunction)(void *), void *ptr);
+
 
 /*******************************************************************************
 * NAME : GPIO_init
